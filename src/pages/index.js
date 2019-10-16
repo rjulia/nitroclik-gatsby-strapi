@@ -3,6 +3,7 @@ import { Link, graphql } from "gatsby"
 import Img from 'gatsby-image'
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import ReactMarkdown from "react-markdown"
 
 const IndexPage = ({ data: { allStrapiArticle: { edges } } }) => (
   <Layout>
@@ -16,7 +17,10 @@ const IndexPage = ({ data: { allStrapiArticle: { edges } } }) => (
         return (<li key={doc.id}>
           <h2><Link to={`/${doc.id}`}> {doc.title}</Link></h2>
           <Img fixed={doc.image.childImageSharp.fixed} />
-          <p>{doc.content}</p>
+          <ReactMarkdown source={doc.content}
+            transformImageUri={uri => uri.startsWith('http') ? uri : `${process.env.IMAGE_BASE_URL}${uri}`}
+          />
+
         </li>)
       })}
     </ul>
